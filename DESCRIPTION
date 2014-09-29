@@ -1,0 +1,14 @@
+Package: ggFunctions
+Title: Custom ggplot2 functions
+Version: 0.1.0
+Authors@R: c(person("Mickael", "Canouil", role = c("aut", "cre"), email =
+    "mickael.canouil@good.ibl.fr"))
+Description: Some ggplot2 functions: manhanttan, qqplot, ...
+Depends:
+    R (>= 3.1.0),
+    ggplot2,
+    grid,
+    ellipse
+License: GPL (>= 2)
+LazyData: true
+Encoding: UTF-8
