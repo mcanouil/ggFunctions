@@ -24,8 +24,11 @@ s.class.ggplot2 <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(d
         require("grid")
         require("scales")
         data <- data.frame(cbind(x = dfxy[, xax], y = dfxy[, yax]), row.names = rownames(dfxy))
+        if (lab.names==FALSE) {
+            lab.names <- ""
+        } else {}
         data[, "label"] <- lab.names
-        data[, "class"] <- fac
+        data[, "class"] <- as.factor(fac)
         if (any(nchar(levels(fac))>2)) {
              warning("s.class.ggplot2 : 'fac' have more than 2 characters. Labels might not be displayed properly.")
         } else {}
