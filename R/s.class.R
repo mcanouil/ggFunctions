@@ -20,9 +20,9 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
         is.element(mypkg, installed.packages()[,1])
     }
     if (is.installed("ggplot2") & is.installed("grid")) {
-        require("ggplot2")
-        require("grid")
-        require("scales")
+        # require("ggplot2")
+        # require("grid")
+        # require("scales")
         data <- data.frame(cbind(x = dfxy[, xax], y = dfxy[, yax]), row.names = rownames(dfxy))
         if (lab.names==FALSE) {
             lab.names <- ""
