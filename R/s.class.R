@@ -106,7 +106,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
         } else {}
 
         if (is.installed("ellipse") & drawEllipse) {
-            require(ellipse)
+            # require(ellipse)
             dataEllipse <- data.frame()
             for(g in levels(data[, "class"])){
                 dataEllipse <- rbind(dataEllipse,
