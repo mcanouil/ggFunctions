@@ -25,7 +25,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
         # require("grid")
         # require("scales")
         data <- data.frame(cbind(x = dfxy[, xax], y = dfxy[, yax]), row.names = rownames(dfxy))
-        if (lab.names==FALSE) {
+        if (any(lab.names==FALSE)) {
             lab.names <- ""
         } else {}
         data[, "label"] <- lab.names
