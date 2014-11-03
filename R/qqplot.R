@@ -7,6 +7,7 @@
 #' @param noGrid [logical]: A grid in the background of the plot should be drawn.
 #' @param base_size [numeric]: Font size.
 #' @return A qqplot in ggplot2 format.
+#' @export
 # @examples
 # qqplot()
 qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid = FALSE, base_size = 12) {

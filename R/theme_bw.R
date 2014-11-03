@@ -4,6 +4,7 @@
 #' @param base_family [character]: Font family.
 #' @param noGrid [logical]: A grid in the background of the plot should be drawn.
 #' @return A ggplot2 theme object.
+#' @export
 # @examples
 # p <- ggplot(mtcars, aes(x = wt, y=mpg), . ~ cyl) + geom_point()
 # p <- p + theme_bw()

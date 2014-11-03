@@ -13,6 +13,7 @@
 #' @param noGrid [logical]: A grid in the background of the plot should be drawn.
 #' @param base_size [numeric]: Font size.
 #' @return A Manhattan plot in ggplot2 format.
+#' @export
 # @examples
 # manhattan()
 manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = "Chromosomes", ylab = "P-Value", sep = 0.02, colour = sapply(c(seq(0.5, 1, by = 1/23), seq(0, 0.5, by = 1/23)), hsv, s = 0.8, v = 1), bw = TRUE, noGrid = FALSE, base_size = 12) {

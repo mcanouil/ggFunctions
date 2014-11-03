@@ -13,6 +13,7 @@
 #' @param noGrid [logical]: A grid in the background of the plot should be drawn.
 #' @param base_size [numeric]: Font size.
 #' @return A s.class plot in ggplot2 format.
+#' @export
 # @examples
 # s.class()
 s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), lab.extreme = FALSE, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12) {
