@@ -10,7 +10,7 @@
 # p <- p + theme_bw()
 theme_bw <- function (base_size = 12, base_family = "", noGrid = FALSE) {
     if (noGrid) {
-        noGridColour <- "white"
+        noGridColour <- "transparent" # "white"
     } else {
         noGridColour <- c("gray90", "grey95")
     }

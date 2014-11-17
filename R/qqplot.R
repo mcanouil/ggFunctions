@@ -53,7 +53,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
     if (bw) {
         bw <- function (base_size = 12, base_family = "", noGrid = FALSE) {
             if (noGrid) {
-                noGridColour <- "white"
+                noGridColour <- "transparent"
             } else {
                 noGridColour <- c("gray90", "grey95")
             }

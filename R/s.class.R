@@ -46,7 +46,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
         if (bw) {
             blackwhite <- function (base_size = 12, base_family = "", noGrid = FALSE) {
                 if (noGrid) {
-                    noGridColour <- "white"
+                    noGridColour <- "transparent"
                 } else {
                     noGridColour <- c("gray90", "grey95")
                 }

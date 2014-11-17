@@ -58,7 +58,7 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
     if (bw) {
         bw <- function (base_size = 12, base_family = "", noGrid = FALSE) {
             if (noGrid) {
-                noGridColour <- "white"
+                noGridColour <- "transparent"
             } else {
                 noGridColour <- c("gray90", "grey95")
             }
