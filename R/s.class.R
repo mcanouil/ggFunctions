@@ -30,9 +30,6 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         } else {}
         data[, "label"] <- lab.names
         data[, "class"] <- as.factor(fac)
-        if (any(nchar(levels(fac))>2)) {
-             warning("[s.class] 'fac' have more than 2 characters. Labels might not be displayed properly.")
-        } else {}
         centroids <- aggregate(cbind(x, y) ~ class, data = data, mean)
         colnames(centroids) <- paste0(colnames(centroids), c("", ".centroid", ".centroid"))
         data <- merge(data, centroids, by = "class")
@@ -42,7 +39,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         }))
         rownames(data) <- NULL
 
-        p <- ggplot(data = data) + theme_grey(base_size = 12)
+        p <- ggplot(data = data) + theme_grey(base_size = base_size)
         if (bw) {
             blackwhite <- function (base_size = 12, base_family = "", noGrid = FALSE) {
                 if (noGrid) {
@@ -94,22 +91,21 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             }
             p <- p + blackwhite(base_size = base_size, noGrid = noGrid)
         } else {}
-        p <- p + theme(legend.position = "none")
         if (length(unique(fac))<=6)  {
             p <- p + scale_colour_manual(values = c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
         } else {}
         p <- p + geom_hline(aes(yintercept = 0)) + geom_vline(aes(xintercept = 0))
-        p <- p + geom_point(aes_string(x = "x", y = "y", color = "class"))
+        p <- p + geom_point(aes_string(x = "x", y = "y", colour = "class"))
 
         if (drawSegment) {
-            p <- p + geom_point(data = centroids, aes_string(x = "x.centroid", y = "y.centroid", color = "class"))
-            p <- p + geom_segment(aes_string(x = "x.centroid", y = "y.centroid", xend = "x", yend = "y", color = "class"))
+            p <- p + geom_point(data = centroids, aes_string(x = "x.centroid", y = "y.centroid", colour = "class"), colour = "transparent")
+            p <- p + geom_segment(aes_string(x = "x.centroid", y = "y.centroid", xend = "x", yend = "y", colour = "class"))
         } else {}
 
-        if (is.installed("ellipse") & drawEllipse) {
+        if (drawEllipse && is.installed("ellipse")) {
             # require(ellipse)
             dataEllipse <- data.frame()
-            for(g in levels(data[, "class"])){
+            for (g in levels(data[, "class"])) {
                 dataEllipse <- rbind(dataEllipse,
                     cbind(as.data.frame(with(data[data[, "class"]==g,], ellipse(cor(x, y), scale = cellipse*c(sd(x), sd(y)), centre = c(mean(x), mean(y))))), class = g))
             }
@@ -125,7 +121,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         } else {
             p <- p + geom_text(data = data, aes_string(x = "x", y = "y", label = "label"), colour = "black", hjust = 0.5, vjust = 0.5, size = rel(4))
         }
-        p <- p + labs(x = NULL, y = NULL)
+        # p <- p + labs(x = NULL, y = NULL)
         # p <- p + theme(
             # axis.title = element_blank(),
             # axis.text = element_blank(),
@@ -137,10 +133,17 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         # p <- p + annotate("text", x = -Inf, y = -Inf, label = paste0("xax = ", xax, "; yax = ", yax), hjust = -0.05, vjust = -0.5, size = rel(5))
         p <- p + labs(x = paste("Component", xax), y = paste("Component", yax))
 
-        if (drawEllipse | drawSegment) {
-            p <- p + geom_point(data = centroids, aes_string(x = "x.centroid", y = "y.centroid"), fill = "white", colour = "grey30", shape = 22, size = rel(8.5))
-            p <- p + geom_text(data = centroids, aes_string(x = "x.centroid", y = "y.centroid", label = "class", colour = "class"), hjust = 0.5, vjust = 0.5, size = rel(4))
-        } else {}
+        if (any(nchar(levels(fac))<=2)) {
+            p <- p + theme(legend.position = "none")
+            if (drawEllipse | drawSegment) {
+                p <- p + geom_point(data = centroids, aes_string(x = "x.centroid", y = "y.centroid"), fill = "white", colour = "grey30", shape = 22, size = rel(8.5))
+                p <- p + geom_text(data = centroids, aes_string(x = "x.centroid", y = "y.centroid", label = "class", colour = "class"), hjust = 0.5, vjust = 0.5, size = rel(4))
+            } else {}
+        } else {
+             p <- p + theme(legend.title = element_blank())
+            # warning("[s.class] 'fac' have more than 2 characters. Labels might not be displayed properly.")
+        }
+
 
         lim <- apply(data[, c("x", "y")], 2, range)
         lims <- rbind(apply(lim, 2, median)-max(apply(lim, 2, diff))/2,
