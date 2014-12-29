@@ -3,7 +3,7 @@
 \alias{s.class}
 \title{s.class create a s.class plot for a dudi object (ade4)}
 \usage{
-s.class(dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy),
+s.class(dfxy, fac, xax = 1, yax = 2, lab.names = "",
   lab.extreme = FALSE, drawEllipse = TRUE, cellipse = 1,
   drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12)
 }

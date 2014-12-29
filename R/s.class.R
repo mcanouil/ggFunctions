@@ -16,7 +16,7 @@
 #' @export
 # @examples
 # s.class()
-s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), lab.extreme = FALSE, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12) {
+s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = FALSE, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12) {
     is.installed <- function (mypkg) {
         is.element(mypkg, installed.packages()[,1])
     }
@@ -42,7 +42,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
         }))
         rownames(data) <- NULL
 
-        p <- ggplot(data = data) + theme_grey(base_size = 18)
+        p <- ggplot(data = data) + theme_grey(base_size = 12)
         if (bw) {
             blackwhite <- function (base_size = 12, base_family = "", noGrid = FALSE) {
                 if (noGrid) {
@@ -126,15 +126,16 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
             p <- p + geom_text(data = data, aes_string(x = "x", y = "y", label = "label"), colour = "black", hjust = 0.5, vjust = 0.5, size = rel(4))
         }
         p <- p + labs(x = NULL, y = NULL)
-        p <- p + theme(
-            axis.title = element_blank(),
-            axis.text = element_blank(),
-            axis.ticks = element_blank(),
-            axis.ticks.length = unit(0, "cm"),
-            axis.ticks.margin = unit(0, "cm"),
-            plot.margin = unit(c(0, 0, 0, 0), "cm")
-        )
-        p <- p + annotate("text", x = -Inf, y = -Inf, label = paste0("xax = ", xax, "; yax = ", yax), hjust = -0.05, vjust = -0.5, size = rel(5))
+        # p <- p + theme(
+            # axis.title = element_blank(),
+            # axis.text = element_blank(),
+            # axis.ticks = element_blank(),
+            # axis.ticks.length = unit(0, "cm"),
+            # axis.ticks.margin = unit(0, "cm"),
+            # plot.margin = unit(c(0, 0, 0, 0), "cm")
+        # )
+        # p <- p + annotate("text", x = -Inf, y = -Inf, label = paste0("xax = ", xax, "; yax = ", yax), hjust = -0.05, vjust = -0.5, size = rel(5))
+        p <- p + labs(x = paste("Component", xax), y = paste("Component", yax))
 
         if (drawEllipse | drawSegment) {
             p <- p + geom_point(data = centroids, aes_string(x = "x.centroid", y = "y.centroid"), fill = "white", colour = "grey30", shape = 22, size = rel(8.5))
@@ -145,14 +146,6 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
         lims <- rbind(apply(lim, 2, median)-max(apply(lim, 2, diff))/2,
             apply(lim, 2, median)+max(apply(lim, 2, diff))/2)
         lims <- lims+apply(lims, 2, diff)*0.05*c(-1, 1)
-        # rangeLims <- range(abs(as.vector(lims))-0)
-        # steps <- 10^(nchar(round(max(rangeLims)))-1)
-        # breakLims <- apply(lims, 2, function (i) {
-            # c((abs(i[1])%/%steps+1)*sign(i[1])*steps,
-            # (abs(i[2])%/%steps+1)*sign(i[2])*steps)
-        # })
-        # xBreaks <- seq(from = breakLims[1, "x"], to = breakLims[2, "x"], by = steps)
-        # yBreaks <- seq(from = breakLims[1, "y"], to = breakLims[2, "y"], by = steps)
         if (drawEllipse) {
             ellipseLims <- apply(dataEllipse[, c("xEllipse", "yEllipse")], 2, range)
             newLimsMax <- matrix(mapply(max, lims, ellipseLims), ncol = 2, dimnames = dimnames(lims))
@@ -162,9 +155,30 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
             if (is.matrix(Breaks)) {
                 xBreaks <- Breaks[, 1]
                 yBreaks <- Breaks[, 2]
+                breakStep <- min(unique(as.vector(diff(Breaks))))
             } else {
                 xBreaks <- Breaks[[1]]
                 yBreaks <- Breaks[[2]]
+                breakStep <- max(unique(unlist(sapply(Breaks, diff))))
+            }
+            if (breakStep>diff(range(xBreaks))/2 || breakStep>diff(range(yBreaks))/2) {
+                breakStep <- min(unique(unlist(sapply(Breaks, diff))))
+            } else {}
+            if (findInterval(0, xBreaks)>0) {
+                xBreaks <- sort(unique(c(
+                    sign(min(xBreaks)) * seq(0, abs(min(xBreaks)), breakStep),
+                    seq(0, max(xBreaks), breakStep)
+                )))
+            } else {
+                xBreaks <- seq(min(xBreaks), max(xBreaks), breakStep)
+            }
+            if (findInterval(0, yBreaks)>0) {
+                yBreaks <- sort(unique(c(
+                    sign(min(yBreaks)) * seq(0, abs(min(yBreaks)), breakStep),
+                    seq(0, max(yBreaks), breakStep)
+                )))
+            } else {
+                yBreaks <- seq(min(yBreaks), max(yBreaks), breakStep)
             }
             p <- p + scale_x_continuous(breaks = xBreaks, limits = newLims[, "x"]) + scale_y_continuous(breaks = yBreaks, limits = newLims[, "y"])
         } else {
@@ -178,13 +192,12 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = rownames(dfxy), la
             }
             p <- p + scale_x_continuous(breaks = xBreaks, limits = lims[, "x"]) + scale_y_continuous(breaks = yBreaks, limits = lims[, "y"])
         }
-        if (is.matrix(Breaks)) {
-            breakStep <- unique(as.vector(diff(Breaks)))
-        } else {
-            breakStep <- unique(unlist(sapply(Breaks, diff)))
-        }
-        # p <- p + annotate("text", x = Inf, y = Inf, label = paste0("d = ", steps), hjust = 1.05, vjust = 1.5, size = rel(5))
-        p <- p + annotate("text", x = Inf, y = Inf, label = paste0("d = ", breakStep), hjust = 1.05, vjust = 1.5, size = rel(5))
+        # if (is.matrix(Breaks)) {
+            # breakStep <- unique(as.vector(diff(Breaks)))
+        # } else {
+            # breakStep <- min(unique(unlist(sapply(Breaks, diff))))
+        # }
+        # p <- p + annotate("text", x = Inf, y = Inf, label = paste0("d = ", breakStep), hjust = 1.05, vjust = 1.5, size = rel(5))
         return(p)
     } else {
         stop("[s.class] 'ggplot2' and 'grid' packages must be installed.")
