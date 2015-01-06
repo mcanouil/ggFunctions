@@ -39,7 +39,7 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
     } else {}
     chrSizeNew <- table(data[, chr])
     chrStep <- floor(sum(chrSizeNew) * sep)
-    data[, "xPos"] <- unlist(sapply(seq(length(chrSizeNew)), function (iSize) {
+    data[, "xPos"] <- unlist(sapply(seq_along(chrSizeNew), function (iSize) {
         if (chrSizeNew[iSize]!=0) {
             xPos <- seq(chrSizeNew[iSize])
             range(xPos)

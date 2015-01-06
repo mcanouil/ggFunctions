@@ -195,12 +195,6 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             }
             p <- p + scale_x_continuous(breaks = xBreaks, limits = lims[, "x"]) + scale_y_continuous(breaks = yBreaks, limits = lims[, "y"])
         }
-        # if (is.matrix(Breaks)) {
-            # breakStep <- unique(as.vector(diff(Breaks)))
-        # } else {
-            # breakStep <- min(unique(unlist(sapply(Breaks, diff))))
-        # }
-        # p <- p + annotate("text", x = Inf, y = Inf, label = paste0("d = ", breakStep), hjust = 1.05, vjust = 1.5, size = rel(5))
         return(p)
     } else {
         stop("[s.class] 'ggplot2' and 'grid' packages must be installed.")
