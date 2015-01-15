@@ -20,7 +20,8 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
     is.installed <- function (mypkg) {
         is.element(mypkg, installed.packages()[,1])
     }
-    if (is.installed("ggplot2") & is.installed("grid")) {
+    # if (is.installed("ggplot2") & is.installed("grid")) {
+    if (require("ggplot2") & require("grid")) {
         # require("ggplot2")
         # require("grid")
         # require("scales")
@@ -102,7 +103,8 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             p <- p + geom_segment(aes_string(x = "x.centroid", y = "y.centroid", xend = "x", yend = "y", colour = "class"))
         } else {}
 
-        if (drawEllipse && is.installed("ellipse")) {
+        # if (drawEllipse && is.installed("ellipse")) {
+        if (drawEllipse & require("ellipse")) {
             # require(ellipse)
             dataEllipse <- data.frame()
             for (g in levels(data[, "class"])) {
