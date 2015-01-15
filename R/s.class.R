@@ -20,8 +20,8 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
     is.installed <- function (mypkg) {
         is.element(mypkg, installed.packages()[,1])
     }
-    # if (is.installed("ggplot2") & is.installed("grid")) {
-    if (require("ggplot2") & require("grid")) {
+    if (is.installed("ggplot2") & is.installed("grid")) {
+    # if (require("ggplot2") & require("grid")) {
         # require("ggplot2")
         # require("grid")
         # require("scales")
