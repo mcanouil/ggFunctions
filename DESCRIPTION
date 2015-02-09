@@ -3,7 +3,7 @@ Title: Custom ggplot2 Functions
 Version: 0.1.11
 Date: 2015-02-05
 Authors@R: c(person("Mickael", "Canouil", role = c("aut", "cre"), email =
-    "mickael.canouil@good.ibl.fr"))
+    "mickael.canouil@cnrs.fr"))
 Description: Some ggplot2 functions: manhanttan, qqplot, ...
 Depends:
     R (>= 3.1.0),
