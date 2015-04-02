@@ -6,6 +6,7 @@
 #' @param yax [numeric]: The column number of y in ‘dfxy’. Component from 'dudi.pca' object for y axis.
 #' @param lab.names [vector(character)]: Should labels be printed.
 #' @param lab.extreme [logical]: Should outlier's labels be printed.
+#' @param thresh.extreme [numeric]: Outlier's scale.
 #' @param drawEllipse [logical]: Draw an ellipse to represent variance.
 #' @param cellipse [numeric]: Size factor for the ellipse.
 #' @param drawSegment [logical]: Draw segment from center of each groups defined by 'fac'.
@@ -16,7 +17,7 @@
 #' @export
 # @examples
 # s.class()
-s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = FALSE, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12) {
+s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = FALSE, thresh.extreme = 2, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12) {
     is.installed <- function (mypkg) {
         is.element(mypkg, installed.packages()[,1])
     }
@@ -36,7 +37,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         data <- merge(data, centroids, by = "class")
         data[, "dist"] <- sqrt((data[, "x"]-data[, "x.centroid"])^2 + (data[, "y"]-data[, "y.centroid"])^2)
         data <- do.call("rbind", by(data, data[, "class"], function (iDist) {
-            cbind(iDist, close = iDist[, "dist"]>quantile(iDist[, "dist"], c(0.75))+1*diff(quantile(iDist[, "dist"], c(0.25, 0.75))))
+            cbind(iDist, close = iDist[, "dist"]>quantile(iDist[, "dist"], c(0.75))+thresh.extreme*diff(quantile(iDist[, "dist"], c(0.25, 0.75))))
         }))
         rownames(data) <- NULL
 

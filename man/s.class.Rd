@@ -5,8 +5,9 @@
 \title{s.class create a s.class plot for a dudi object (ade4)}
 \usage{
 s.class(dfxy, fac, xax = 1, yax = 2, lab.names = "",
-  lab.extreme = FALSE, drawEllipse = TRUE, cellipse = 1,
-  drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12)
+  lab.extreme = FALSE, thresh.extreme = 2, drawEllipse = TRUE,
+  cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE,
+  base_size = 12)
 }
 \arguments{
 \item{dfxy}{[data.frame]: A data frame containing the two columns for the axes}
@@ -20,6 +21,8 @@ s.class(dfxy, fac, xax = 1, yax = 2, lab.names = "",
 \item{lab.names}{[vector(character)]: Should labels be printed.}
 
 \item{lab.extreme}{[logical]: Should outlier's labels be printed.}
+
+\item{thresh.extreme}{[numeric]: Outlier's scale.}
 
 \item{drawEllipse}{[logical]: Draw an ellipse to represent variance.}
 
