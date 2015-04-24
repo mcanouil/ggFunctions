@@ -2,6 +2,8 @@ ggFunctions
 ===========
 [![Build Status](https://travis-ci.org/mcanouil/ggFunctions.svg?branch=master)](https://travis-ci.org/mcanouil/ggFunctions)
 
+http://mcanouil.github.io/ggFunctions
+
 Some ggplot2 functions: manhanttan, qqplot, ...
 
 ### 1. Install and load ggFunctions
