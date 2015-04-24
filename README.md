@@ -1,5 +1,6 @@
 ggFunctions
 ===========
+[![Build Status](https://travis-ci.org/mcanouil/ggFunctions.svg?branch=master)](https://travis-ci.org/mcanouil/ggFunctions)
 
 Some ggplot2 functions: manhanttan, qqplot, ...
 
