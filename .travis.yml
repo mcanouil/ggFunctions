@@ -1,10 +1,10 @@
 # Sample .travis.yml for R projects from https://github.com/craigcitro/r-travis
 
 language: r
-warnings_are_errors: true
+warnings_are_errors: false
 sudo: required
 
 notifications:
-  email:
-    on_success: change
-    on_failure: change
+    email:
+        on_success: change
+        on_failure: change
