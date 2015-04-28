@@ -1,7 +1,7 @@
 Package: ggFunctions
 Title: Custom ggplot2 Functions
-Version: 0.1.14
-Date: 2015-04-02
+Version: 0.1.15
+Date: 2015-04-28
 Authors@R: c(person("Mickael", "Canouil", role = c("aut", "cre"), email = "mickael.canouil@cnrs.fr"))
 Description: Some ggplot2 functions: manhanttan, qqplot, ...
 Depends:
