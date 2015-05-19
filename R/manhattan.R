@@ -17,7 +17,8 @@
 # @examples
 # manhattan()
 manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = "Chromosomes", ylab = "P-Value", sep = 0.02, colour = sapply(c(seq(0.5, 1, by = 1/23), seq(0, 0.5, by = 1/23)), hsv, s = 0.8, v = 1), bw = TRUE, noGrid = FALSE, base_size = 12) {
-    data[, chr] <- factor(data[, chr], levels = c(seq(22), "X", "Y"))
+    data[, chr] <- gsub("chr", "", tolower(data[, chr]))
+    data[, chr] <- factor(toupper(data[, chr]), levels = c(seq(22), "X", "Y"))
     data <- data[order(data[, chr], data[, position]), ]
     notNA <- apply(data[, c(chr, position)], 1, function (iRow) {any(is.na(iRow))})
     data <- data[which(!notNA), ]
