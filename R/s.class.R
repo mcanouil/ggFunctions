@@ -71,7 +71,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             p <- p + scale_colour_manual(values = c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
         } else {}
         p <- p + geom_hline(aes(yintercept = 0)) + geom_vline(aes(xintercept = 0))
-        p <- p + geom_point(aes_string(x = "x", y = "y", colour = "class"))
+        p <- p + geom_point(aes_string(x = "x", y = "y", colour = "class", shape = "class"))
 
         if (drawSegment) {
             p <- p + geom_point(data = centroids, aes_string(x = "x.centroid", y = "y.centroid", colour = "class"), colour = "transparent")
