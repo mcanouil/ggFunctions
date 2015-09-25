@@ -30,9 +30,9 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
     labs <- NULL
     res <- NULL
     for (i in seq(ncol(pvalue))) {
-        pv  <- pvalue[, i]
-        X2  <- qnorm(pv, lower.tail = FALSE)^2
-        gc  <- median(X2, na.rm = TRUE)/qchisq(0.5, df = 1)
+        pv <- pvalue[, i]
+        X2 <- qnorm(pv, lower.tail = FALSE)^2
+        gc <- median(X2, na.rm = TRUE)/qchisq(0.5, df = 1)
         obspval <- sort(pv)
         logobspval <- -(log10(obspval))
         exppval <- c(1:length(obspval))
