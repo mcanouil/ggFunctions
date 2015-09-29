@@ -56,6 +56,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         })
         return(tmp[!whichInfinite, ])
     }))
+    res[, "i"] <- factor(res[, "i"], levels = unique(res[, "i"]))
     p <- ggplot(data = res)
     if (bw) {
         blackwhite <- function (base_size = 12, base_family = "", noGrid = FALSE) {
@@ -86,9 +87,9 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
     p <- p + geom_point(aes_string(x = "logexppval", y = "logobspval", colour = "i"), size = pt.size, shape = 1)
     p <- p + labs(x = bquote(Expected -log[10](P[value])), y = bquote(Observed -log[10](P[value])))
     if (ncol(pvalue) > length(c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))) {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = labs, values = .ggplotColours(ncol(pvalue)))
+        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), aes(labels = labs), values = .ggplotColours(ncol(pvalue)))
     } else {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = labs, values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
+        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), aes(labels = labs), values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
     }
     p <- p + labs(title = "Q-Q plot") + theme(plot.title = element_text(lineheight = 0.8, face = "bold"))
     axisLim <- range(pretty_breaks()(range(unlist(lapply(seq(ncol(pvalue)), function (i) {
