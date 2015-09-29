@@ -51,7 +51,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         # labs <- bquote(lambda[gc]^.(lambdaNames[i]) == .(round(gc, 4)))
         labs <- paste0(lambdaNames[i], "=", round(gc, 4))
         tmp <- data.frame(logexppval, logobspval, i, labs)
-        whichInfinite <- apply(res, 1, function (iRow) {
+        whichInfinite <- apply(tmp, 1, function (iRow) {
             return(any(sapply(as.numeric(iRow[-3]), is.infinite)))
         })
         return(tmp[!whichInfinite, ])
