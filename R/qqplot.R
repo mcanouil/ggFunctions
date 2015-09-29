@@ -39,7 +39,8 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         # res <- rbind(res, data.frame(logexppval, logobspval, i))
     # }
 
-    res <- do.call("rbind", mclapply(seq(ncol(pvalue)), mc.cores = detectCores(), function (i) {
+    # res <- do.call("rbind", mclapply(seq(ncol(pvalue)), mc.cores = detectCores(), function (i) {
+    res <- do.call("rbind", lapply(seq(ncol(pvalue)), function (i) {
         pv <- pvalue[, i]
         X2 <- qnorm(pv, lower.tail = FALSE)^2
         gc <- median(X2, na.rm = TRUE)/qchisq(0.5, df = 1)
@@ -90,9 +91,12 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = labs, values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
     }
     p <- p + labs(title = "Q-Q plot") + theme(plot.title = element_text(lineheight = 0.8, face = "bold"))
-    axisLim <- range(pretty_breaks()(range(unlist(mclapply(seq(ncol(pvalue)), mc.cores = detectCores(), function (i) {
+    axisLim <- range(pretty_breaks()(range(unlist(lapply(seq(ncol(pvalue)), function (i) {
         range(res[res[, "i"]%in%i, c(1, 2)])
     })))))
+    # axisLim <- range(pretty_breaks()(range(unlist(mclapply(seq(ncol(pvalue)), mc.cores = detectCores(), function (i) {
+        # range(res[res[, "i"]%in%i, c(1, 2)])
+    # })))))
     p <- p + xlim(axisLim) + ylim(axisLim)
     return(p)
 }
