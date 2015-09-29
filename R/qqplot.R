@@ -52,7 +52,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         labs <- paste0(lambdaNames[i], "=", round(gc, 4))
         tmp <- data.frame(logexppval, logobspval, i, labs)
         whichInfinite <- apply(tmp, 1, function (iRow) {
-            return(any(sapply(as.numeric(iRow[-3]), is.infinite)))
+            return(any(sapply(as.numeric(iRow[-c(3, 4)]), is.infinite)))
         })
         return(tmp[!whichInfinite, ])
     }))
