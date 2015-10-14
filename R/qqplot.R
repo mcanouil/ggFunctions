@@ -21,25 +21,10 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         } else {}
         return(c("black", hcl(h = (seq(h[1], h[2], length = (n-1))), c = 100, l = 65)))
     }
-    if (is.null(lambdaNames) & any(colnames(pvalue)=="")) {
+    if (is.null(lambdaNames) & (any(colnames(pvalue)=="")|is.null(colnames(pvalue)))) {
         lambdaNames <- paste0("lambda", seq(ncol(pvalue)))
     } else {}
 
-    # labs <- NULL
-    # res <- NULL
-    # for (i in seq(ncol(pvalue))) {
-        # pv <- pvalue[, i]
-        # X2 <- qnorm(pv, lower.tail = FALSE)^2
-        # gc <- median(X2, na.rm = TRUE)/qchisq(0.5, df = 1)
-        # obspval <- sort(pv)
-        # logobspval <- -(log10(obspval))
-        # exppval <- c(1:length(obspval))
-        # logexppval <- -(log10((exppval-0.5)/length(exppval)))
-        # labs <- c(labs, bquote(lambda[gc]^.(lambdaNames[i]) == .(round(gc, 4))))
-        # res <- rbind(res, data.frame(logexppval, logobspval, i))
-    # }
-
-    # res <- do.call("rbind", mclapply(seq(ncol(pvalue)), mc.cores = detectCores(), function (i) {
     res <- do.call("rbind", lapply(seq(ncol(pvalue)), function (i) {
         pv <- pvalue[, i]
         X2 <- qnorm(pv, lower.tail = FALSE)^2
@@ -48,9 +33,9 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         logobspval <- -(log10(obspval))
         exppval <- c(1:length(obspval))
         logexppval <- -(log10((exppval-0.5)/length(exppval)))
-        # labs <- bquote(lambda[gc]^.(lambdaNames[i]) == .(round(gc, 4)))
-        labs <- paste0(lambdaNames[i], "=", round(gc, 4))
-        tmp <- data.frame(logexppval, logobspval, i, labs)
+        # labnames <- bquote(lambda[gc]^.(lambdaNames[i]) == .(round(gc, 4)))
+        labnames <- paste0(lambdaNames[i], "=", round(gc, 4))
+        tmp <- data.frame(logexppval, logobspval, i, labnames)
         whichInfinite <- apply(tmp, 1, function (iRow) {
             return(any(sapply(as.numeric(iRow[-c(3, 4)]), is.infinite)))
         })
@@ -83,21 +68,23 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         }
         p <- p + blackwhite(base_size = base_size, noGrid = noGrid)
     } else {}
-    p <- p + geom_abline(intercept = 0, slope = 1)
-    p <- p + geom_point(aes_string(x = "logexppval", y = "logobspval", colour = "i"), size = pt.size, shape = 1)
-    p <- p + labs(x = bquote(Expected -log[10](P[value])), y = bquote(Observed -log[10](P[value])))
+    p <- p + geom_abline(intercept = 0, slope = 1) +
+        geom_point(aes_string(x = "logexppval", y = "logobspval", colour = "i"), size = pt.size, shape = 1) +
+        labs(
+            x = bquote(Expected -log[10](P[value])),
+            y = bquote(Observed -log[10](P[value])),
+            title = "Q-Q plot"
+        ) +
+        theme(plot.title = element_text(lineheight = 0.8, face = "bold"))
     if (ncol(pvalue) > length(c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))) {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), aes(labels = labs), values = .ggplotColours(ncol(pvalue)))
+        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = sort(unique(res[, "labnames"])), values = .ggplotColours(ncol(pvalue)))
     } else {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), aes(labels = labs), values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
+        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = sort(unique(res[, "labnames"])), values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
     }
-    p <- p + labs(title = "Q-Q plot") + theme(plot.title = element_text(lineheight = 0.8, face = "bold"))
+
     axisLim <- range(pretty_breaks()(range(unlist(lapply(seq(ncol(pvalue)), function (i) {
         range(res[res[, "i"]%in%i, c(1, 2)])
     })))))
-    # axisLim <- range(pretty_breaks()(range(unlist(mclapply(seq(ncol(pvalue)), mc.cores = detectCores(), function (i) {
-        # range(res[res[, "i"]%in%i, c(1, 2)])
-    # })))))
     p <- p + xlim(axisLim) + ylim(axisLim)
     return(p)
 }
