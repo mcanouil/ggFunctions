@@ -27,7 +27,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
 
     res <- do.call("rbind", lapply(seq(ncol(pvalue)), function (i) {
         pv <- pvalue[, i]
-        X2 <- qnorm(pv, lower.tail = FALSE)^2
+        X2 <- qnorm(pv/2)^2
         gc <- median(X2, na.rm = TRUE)/qchisq(0.5, df = 1)
         obspval <- sort(pv)
         logobspval <- -(log10(obspval))
