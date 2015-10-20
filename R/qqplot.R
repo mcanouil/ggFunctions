@@ -77,9 +77,9 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         ) +
         theme(plot.title = element_text(lineheight = 0.8, face = "bold"))
     if (ncol(pvalue) > length(c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))) {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = sort(unique(res[, "labnames"])), values = .ggplotColours(ncol(pvalue)))
+        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = unique(res[, "labnames"]), values = .ggplotColours(ncol(pvalue)))
     } else {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = sort(unique(res[, "labnames"])), values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
+        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = unique(res[, "labnames"]), values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
     }
 
     axisLim <- range(pretty_breaks()(range(unlist(lapply(seq(ncol(pvalue)), function (i) {
