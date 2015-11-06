@@ -42,7 +42,7 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
     chrStep <- floor(sum(chrSizeNew) * sep)
     data[, "xPos"] <- unlist(sapply(seq_along(chrSizeNew), function (iSize) {
         if (chrSizeNew[iSize]!=0) {
-            xPos <- seq(chrSizeNew[iSize])
+            xPos <- seq_along(chrSizeNew[iSize])
             range(xPos)
             if (iSize>1) {
                 xPos <- xPos + sum(chrSizeNew[seq(iSize-1)]) + chrStep*(iSize-1)
@@ -50,7 +50,7 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
             } else {}
             return(xPos)
         } else {}
-    }))
+    }), use.names = FALSE)
     avoidZero <- rep(0, length(chrSize))
     avoidZero[which(chrSize==0)] <- chrStep
     whichIsCenter <- ceiling(c(cumsum(chrSizeNew) - diff(c(0, cumsum(chrSizeNew)))/2))
@@ -81,11 +81,21 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
         }
         p <- p + blackwhite(base_size = base_size, noGrid = noGrid)
     } else {}
-    p <- p + theme(panel.background = element_rect(colour = "black"), panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), legend.position = "none")
-    p <- p + geom_point(size = 1.5, shape = 1, na.rm = TRUE)
-    p <- p + scale_colour_manual(values = colour)
-    p <- p + scale_x_continuous(breaks = xBreaks, labels = names(chrSize), limits = c(min(data[, "xPos"]), max(data[, "xPos"])+sum(avoidZero)), expand = c(0.01, 0.01))
-    p <- p + labs(title = title, y = ylab, x = xlab)
+    p <- p + theme(
+            panel.background = element_rect(colour = "black"),
+            panel.grid.major.x = element_blank(),
+            panel.grid.minor.x = element_blank(),
+            legend.position = "none"
+        ) +
+        geom_point(size = 1.5, shape = 1, na.rm = TRUE) +
+        scale_colour_manual(values = colour) +
+        scale_x_continuous(
+            breaks = xBreaks,
+            labels = names(chrSize),
+            limits = c(min(data[, "xPos"]), max(data[, "xPos"])+sum(avoidZero)),
+            expand = c(0.01, 0.01)
+        ) +
+        labs(title = title, y = ylab, x = xlab)
     # suppressWarnings(print(p))
     return(p)
 }
