@@ -22,22 +22,22 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         return(c("black", hcl(h = (seq(h[1], h[2], length = (n-1))), c = 100, l = 65)))
     }
     if (is.null(lambdaNames) & (any(colnames(pvalue)=="")|is.null(colnames(pvalue)))) {
-        lambdaNames <- paste0("lambda", seq(ncol(pvalue)))
+        lambdaNames <- paste0("lambda", seq_len(ncol(pvalue)))
     } else {}
 
-    res <- do.call("rbind", lapply(seq(ncol(pvalue)), function (i) {
+    res <- do.call("rbind", lapply(seq_len(ncol(pvalue)), function (i) {
         pv <- pvalue[, i]
         X2 <- qnorm(pv/2)^2
         gc <- median(X2, na.rm = TRUE)/qchisq(0.5, df = 1)
         obspval <- sort(pv)
         logobspval <- -(log10(obspval))
-        exppval <- c(1:length(obspval))
+        exppval <- seq_along(obspval)
         logexppval <- -(log10((exppval-0.5)/length(exppval)))
         # labnames <- bquote(lambda[gc]^.(lambdaNames[i]) == .(round(gc, 4)))
         labnames <- paste0(lambdaNames[i], "=", round(gc, 4))
         tmp <- data.frame(logexppval, logobspval, i, labnames)
         whichInfinite <- apply(tmp, 1, function (iRow) {
-            return(any(sapply(as.numeric(iRow[-c(3, 4)]), is.infinite)))
+            return(any(is.infinite(as.numeric(iRow[-c(3, 4)]))))
         })
         return(tmp[!whichInfinite, ])
     }))
@@ -77,14 +77,24 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         ) +
         theme(plot.title = element_text(lineheight = 0.8, face = "bold"))
     if (ncol(pvalue) > length(c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))) {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = unique(res[, "labnames"]), values = .ggplotColours(ncol(pvalue)))
+        p <- p + scale_colour_manual(
+            name = element_blank(),
+            breaks = seq_len(ncol(pvalue)),
+            labels = unique(res[, "labnames"]),
+            values = .ggplotColours(ncol(pvalue))
+        )
     } else {
-        p <- p + scale_colour_manual(name = element_blank(), breaks = seq(ncol(pvalue)), labels = unique(res[, "labnames"]), values =  c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
+        p <- p + scale_colour_manual(
+            name = element_blank(),
+            breaks = seqseq_lenn(col(pvalue)),
+            labels = unique(res[, "labnames"]),
+            values = c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue")
+        )
     }
 
     axisLim <- range(pretty_breaks()(range(unlist(lapply(seq(ncol(pvalue)), function (i) {
-        range(res[res[, "i"]%in%i, c(1, 2)])
-    })))))
+        range(res[res[, "i"]==i, c(1, 2)])
+    }), use.names = FALSE))))
     p <- p + xlim(axisLim) + ylim(axisLim)
     return(p)
 }
