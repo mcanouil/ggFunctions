@@ -21,8 +21,12 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         } else {}
         return(c("black", hcl(h = (seq(h[1], h[2], length = (n-1))), c = 100, l = 65)))
     }
-    if (is.null(lambdaNames) & (any(colnames(pvalue)=="")|is.null(colnames(pvalue)))) {
-        lambdaNames <- paste0("lambda", seq_len(ncol(pvalue)))
+    if (is.null(lambdaNames)) {
+        if ((any(colnames(pvalue)=="")|is.null(colnames(pvalue)))) {
+            lambdaNames <- paste0("lambda", seq_len(ncol(pvalue)))
+        } else {
+            lambdaNames <-  paste0("lambda", colnames(pvalue))
+        }
     } else {}
 
     res <- do.call("rbind", lapply(seq_len(ncol(pvalue)), function (i) {
