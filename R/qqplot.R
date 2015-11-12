@@ -25,7 +25,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
         if ((any(colnames(pvalue)=="")|is.null(colnames(pvalue)))) {
             lambdaNames <- paste0("lambda", seq_len(ncol(pvalue)))
         } else {
-            lambdaNames <-  paste0("lambda", colnames(pvalue))
+            lambdaNames <-  colnames(pvalue)
         }
     } else {}
 
