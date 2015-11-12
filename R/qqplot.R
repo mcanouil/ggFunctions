@@ -86,7 +86,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE, noGrid =
     } else {
         p <- p + scale_colour_manual(
             name = element_blank(),
-            breaks = seqseq_lenn(col(pvalue)),
+            breaks = seq_len(col(pvalue)),
             labels = unique(res[, "labnames"]),
             values = c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue")
         )
