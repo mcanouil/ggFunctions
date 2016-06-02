@@ -131,7 +131,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             newLimsMax <- matrix(mapply(max, lims, ellipseLims), ncol = 2, dimnames = dimnames(lims))
             newLimsMin <- matrix(mapply(min, lims, ellipseLims), ncol = 2, dimnames = dimnames(lims))
             newLims <- rbind(newLimsMin[1, ], newLimsMax[2, ])
-            Breaks <- apply(newLims, 2, scales::pretty_breaks())
+            Breaks <- apply(newLims, 2, pretty_breaks())
             if (is.matrix(Breaks)) {
                 xBreaks <- Breaks[, 1]
                 yBreaks <- Breaks[, 2]
@@ -162,7 +162,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             }
             p <- p + scale_x_continuous(breaks = xBreaks, limits = newLims[, "x"]) + scale_y_continuous(breaks = yBreaks, limits = newLims[, "y"])
         } else {
-            Breaks <- apply(lims, 2, scales::pretty_breaks())
+            Breaks <- apply(lims, 2, pretty_breaks())
             if (is.matrix(Breaks)) {
                 xBreaks <- Breaks[, 1]
                 yBreaks <- Breaks[, 2]
