@@ -23,6 +23,7 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
     notNA <- apply(data[, c(chr, position)], 1, function (iRow) {any(is.na(iRow))})
     data <- data[which(!notNA), ]
     chrSize <- table(data[, chr])
+    chrSize <- chrSize[chrSize!=0]
     if (length(chrSize)!=24 | any(chrSize==0)) {
         CHR <- c(seq(22), "X", "Y")
         equalZero <- names(which(chrSize==0))
@@ -38,11 +39,13 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
         data <- data[order(data[, chr], data[, position]), ]
 
     } else {}
+    data <- na.exclude(data)
     chrSizeNew <- table(data[, chr])
+    chrSizeNew <- chrSizeNew[chrSizeNew!=0]
     chrStep <- floor(sum(chrSizeNew) * sep)
     data[, "xPos"] <- unlist(sapply(seq_along(chrSizeNew), function (iSize) {
         if (chrSizeNew[iSize]!=0) {
-            xPos <- seq_along(chrSizeNew[iSize])
+            xPos <- seq_len(chrSizeNew[iSize])
             range(xPos)
             if (iSize>1) {
                 xPos <- xPos + sum(chrSizeNew[seq(iSize-1)]) + chrStep*(iSize-1)
