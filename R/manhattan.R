@@ -39,7 +39,7 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
         data <- data[order(data[, chr], data[, position]), ]
     } else {}
     chrSize <- chrSize[chrSize!=0]
-    data <- na.exclude(data)
+    data <- data[!is.na(data[, y]), ]
     chrSizeNew <- table(data[, chr])
     chrSizeNew <- chrSizeNew[chrSizeNew!=0]
     chrStep <- floor(sum(chrSizeNew) * sep)
