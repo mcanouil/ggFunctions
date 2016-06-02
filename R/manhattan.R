@@ -23,7 +23,6 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
     notNA <- apply(data[, c(chr, position)], 1, function (iRow) {any(is.na(iRow))})
     data <- data[which(!notNA), ]
     chrSize <- table(data[, chr])
-    chrSize <- chrSize[chrSize!=0]
     if (length(chrSize)!=24 | any(chrSize==0)) {
         CHR <- c(seq(22), "X", "Y")
         equalZero <- names(which(chrSize==0))
@@ -35,10 +34,11 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
             newLine[1, chr] <- iChr
             return(newLine)
         })))
+        colnames(newLines) <- colnames(data)
         data <- rbind(data, newLines)
         data <- data[order(data[, chr], data[, position]), ]
-
     } else {}
+    chrSize <- chrSize[chrSize!=0]
     data <- na.exclude(data)
     chrSizeNew <- table(data[, chr])
     chrSizeNew <- chrSizeNew[chrSizeNew!=0]
