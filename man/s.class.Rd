@@ -6,8 +6,7 @@
 \usage{
 s.class(dfxy, fac, xax = 1, yax = 2, lab.names = "",
   lab.extreme = FALSE, thresh.extreme = 2, drawEllipse = TRUE,
-  cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE,
-  base_size = 12)
+  cellipse = 1, drawSegment = TRUE)
 }
 \arguments{
 \item{dfxy}{[data.frame]: A data frame containing the two columns for the axes}
@@ -29,12 +28,6 @@ s.class(dfxy, fac, xax = 1, yax = 2, lab.names = "",
 \item{cellipse}{[numeric]: Size factor for the ellipse.}
 
 \item{drawSegment}{[logical]: Draw segment from center of each groups defined by 'fac'.}
-
-\item{bw}{[logical]: Turn the Grey theme into a a Black&White theme.}
-
-\item{noGrid}{[logical]: A grid in the background of the plot should be drawn.}
-
-\item{base_size}{[numeric]: Font size.}
 }
 \value{
 A s.class plot in ggplot2 format.
