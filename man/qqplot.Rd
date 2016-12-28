@@ -4,8 +4,7 @@
 \alias{qqplot}
 \title{qqplot create a qqplot}
 \usage{
-qqplot(pvalue, lambdaNames = NULL, pt.size = 1, bw = TRUE,
-  noGrid = FALSE, base_size = 12)
+qqplot(pvalue, lambdaNames = NULL, pt.size = 1)
 }
 \arguments{
 \item{pvalue}{[vector(numeric) or matrix(numeric)]: A matrix, data.frame or vector which contains pvalues.}

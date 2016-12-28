@@ -5,9 +5,7 @@
 \title{manhattan create a Manhanttan plot}
 \usage{
 manhattan(data, chr, position, y, title = "Manhattan plot",
-  xlab = "Chromosomes", ylab = "P-Value", sep = 0.02,
-  colour = sapply(c(seq(0.5, 1, by = 1/23), seq(0, 0.5, by = 1/23)), hsv, s =
-  0.8, v = 1), bw = TRUE, noGrid = FALSE, base_size = 12)
+  xlab = "Chromosomes", ylab = "P-Value", sep = 0.02)
 }
 \arguments{
 \item{data}{[data.frame]: A 'data.frame' which include some columns: chromosome, position and pvalues.}
@@ -25,14 +23,6 @@ manhattan(data, chr, position, y, title = "Manhattan plot",
 \item{ylab}{[character]: The text for the y axis.}
 
 \item{sep}{[numeric]: Width of the space between bars.}
-
-\item{colour}{[vector(character or numeric)]: A vector of colors to use. It should be of the same length as the number of chromosome.}
-
-\item{bw}{[logical]: Turn the Grey theme into a a Black&White theme.}
-
-\item{noGrid}{[logical]: A grid in the background of the plot should be drawn.}
-
-\item{base_size}{[numeric]: Font size.}
 }
 \value{
 A Manhattan plot in ggplot2 format.

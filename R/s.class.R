@@ -10,22 +10,15 @@
 #' @param drawEllipse [logical]: Draw an ellipse to represent variance.
 #' @param cellipse [numeric]: Size factor for the ellipse.
 #' @param drawSegment [logical]: Draw segment from center of each groups defined by 'fac'.
-#' @param bw [logical]: Turn the Grey theme into a a Black&White theme.
-#' @param noGrid [logical]: A grid in the background of the plot should be drawn.
-#' @param base_size [numeric]: Font size.
 #' @return A s.class plot in ggplot2 format.
 #' @export
 # @examples
 # s.class()
-s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = FALSE, thresh.extreme = 2, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE, bw = TRUE, noGrid = FALSE, base_size = 12) {
+s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = FALSE, thresh.extreme = 2, drawEllipse = TRUE, cellipse = 1, drawSegment = TRUE) {
     is.installed <- function (mypkg) {
         is.element(mypkg, installed.packages()[,1])
     }
     if (is.installed("ggplot2") & is.installed("grid")) {
-    # if (require("ggplot2") & require("grid")) {
-        # require("ggplot2")
-        # require("grid")
-        # require("scales")
         data <- data.frame(cbind(x = dfxy[, xax], y = dfxy[, yax]), row.names = rownames(dfxy))
         if (any(lab.names==FALSE)) {
             lab.names <- ""
@@ -41,32 +34,7 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         }))
         rownames(data) <- NULL
 
-        p <- ggplot(data = data) + theme_grey(base_size = base_size)
-        if (bw) {
-            blackwhite <- function (base_size = 12, base_family = "", noGrid = FALSE) {
-                if (noGrid) {
-                    noGridColour <- c("transparent", "transparent") # "white"
-                } else {
-                    noGridColour <- c("grey90", "grey98")
-                }
-                theme_grey(base_size = base_size, base_family = base_family) %+replace%
-                    theme(
-                        axis.text = element_text(size = rel(0.8)),
-                        axis.ticks = element_line(colour = "black"),
-                        legend.background = element_rect(fill = "white", colour = "black"),
-                        legend.key = element_rect(fill = "white", colour = "black"),
-                        legend.position = "right",
-                        legend.justification = "center",
-                        legend.box = NULL,
-                        panel.background = element_rect(fill = "white", colour = NA),
-                        panel.border = element_rect(fill = NA, colour = "black"),
-                        panel.grid.major = element_line(colour = noGridColour[1], size = 0.2),
-                        panel.grid.minor = element_line(colour = noGridColour[2], size = 0.5),
-                        strip.background = element_rect(fill = "grey80", colour = "black", size = 0.2)
-                    )
-            }
-            p <- p + blackwhite(base_size = base_size, noGrid = noGrid)
-        } else {}
+        p <- ggplot(data = data)
         if (length(unique(fac))<=6)  {
             p <- p + scale_colour_manual(values = c("dodgerblue", "firebrick2", "springgreen3", "maroon2", "goldenrod2", "deepskyblue"))
         } else {}
@@ -79,12 +47,10 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         } else {}
 
         if (drawEllipse && is.installed("ellipse")) {
-        # if (drawEllipse & require("ellipse")) {
-            # require(ellipse)
             dataEllipse <- data.frame()
             for (g in levels(data[, "class"])) {
                 dataEllipse <- rbind(dataEllipse,
-                    cbind(as.data.frame(with(data[data[, "class"]==g,], ellipse(cor(x, y), scale = cellipse*c(sd(x), sd(y)), centre = c(mean(x), mean(y))))), class = g))
+                    cbind(as.data.frame(with(data[data[, "class"]==g, ], ellipse(cor(x, y), scale = cellipse*c(sd(x), sd(y)), centre = c(mean(x), mean(y))))), class = g))
             }
             colnames(dataEllipse) <- c("xEllipse", "yEllipse", "classEllipse")
             p <- p + geom_path(data = dataEllipse, aes_string(x = "xEllipse", y = "yEllipse", colour = "classEllipse"))
@@ -98,16 +64,6 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
         } else {
             p <- p + geom_text(data = data, aes_string(x = "x", y = "y", label = "label"), colour = "black", hjust = 0.5, vjust = 0.5, size = rel(4))
         }
-        # p <- p + labs(x = NULL, y = NULL)
-        # p <- p + theme(
-            # axis.title = element_blank(),
-            # axis.text = element_blank(),
-            # axis.ticks = element_blank(),
-            # axis.ticks.length = unit(0, "cm"),
-            # axis.ticks.margin = unit(0, "cm"),
-            # plot.margin = unit(c(0, 0, 0, 0), "cm")
-        # )
-        # p <- p + annotate("text", x = -Inf, y = -Inf, label = paste0("xax = ", xax, "; yax = ", yax), hjust = -0.05, vjust = -0.5, size = rel(5))
         p <- p + labs(x = paste("Component", xax), y = paste("Component", yax))
 
         if (any(nchar(levels(fac))<=2)) {
@@ -118,7 +74,6 @@ s.class <- function (dfxy, fac, xax = 1, yax = 2, lab.names = "", lab.extreme = 
             } else {}
         } else {
              p <- p + theme(legend.title = element_blank())
-            # warning("[s.class] 'fac' have more than 2 characters. Labels might not be displayed properly.")
         }
 
 
