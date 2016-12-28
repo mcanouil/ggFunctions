@@ -12,12 +12,6 @@ qqplot(pvalue, lambdaNames = NULL, pt.size = 1)
 \item{lambdaNames}{[vector(character)]: Names of lambda GC, if several colums is given in 'pvalue'.}
 
 \item{pt.size}{[numeric]: Point size.}
-
-\item{bw}{[logical]: Turn the Grey theme into a a Black&White theme.}
-
-\item{noGrid}{[logical]: A grid in the background of the plot should be drawn.}
-
-\item{base_size}{[numeric]: Font size.}
 }
 \value{
 A qqplot in ggplot2 format.

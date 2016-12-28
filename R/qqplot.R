@@ -3,9 +3,6 @@
 #' @param pvalue [vector(numeric) or matrix(numeric)]: A matrix, data.frame or vector which contains pvalues.
 #' @param lambdaNames [vector(character)]: Names of lambda GC, if several colums is given in 'pvalue'.
 #' @param pt.size [numeric]: Point size.
-#' @param bw [logical]: Turn the Grey theme into a a Black&White theme.
-#' @param noGrid [logical]: A grid in the background of the plot should be drawn.
-#' @param base_size [numeric]: Font size.
 #' @return A qqplot in ggplot2 format.
 #' @export
 # @examples
