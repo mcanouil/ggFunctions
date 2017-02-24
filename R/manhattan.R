@@ -54,8 +54,23 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
     avoidZero[which(chrSize==0)] <- chrStep
     whichIsCenter <- ceiling(c(cumsum(chrSizeNew) - diff(c(0, cumsum(chrSizeNew)))/2))
     xBreaks <- data[whichIsCenter, "xPos"]
+
+    pval_trans <- function () {
+        neglog10_breaks <- function (n = 5) {
+            function (x) {
+                rng <- -log(range(x, na.rm = TRUE), base = 10)
+                min <- ceiling(rng[2])
+                max <- floor(rng[1])
+                if (max == min) {
+                    return(10^-min)
+                } else {}
+                by <- floor((max - min)/n) + 1
+                10^-seq(min, max, by = by)
+            }
+        }
+        trans_new(name = "pval", transform = function (x) {-log(x, 10)}, inverse = function (x) {10^-x}, breaks = neglog10_breaks(), domain = c(1e-100, Inf))
+    }
     p <- ggplot(data = data, aes_string(x = "xPos", y = y, colour = chr)) +
-        geom_hline(yintercept = 0) +
         geom_point(size = 1.5, shape = 1, na.rm = TRUE) +
         scale_x_continuous(
             breaks = xBreaks,
@@ -63,6 +78,9 @@ manhattan <- function (data, chr, position, y, title = "Manhattan plot", xlab = 
             limits = c(min(data[, "xPos"]), max(data[, "xPos"])+sum(avoidZero)),
             expand = c(0.01, 0.01)
         ) +
-        labs(title = title, y = ylab, x = xlab)
+        labs(title = title, y = ylab, x = xlab) +
+        theme_light(base_size = 13) +
+        expand_limits(y = 10^-(1.05*-log10(data[, y]))) +
+        scale_y_continuous(trans = pval_trans(), expand = c(0, 0))
     return(p)
 }
