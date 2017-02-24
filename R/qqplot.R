@@ -32,6 +32,7 @@ qqplot <- function (pvalue, lambdaNames = NULL, pt.size = 1) {
         return(tmp[!whichInfinite, ])
     }))
     res[, "i"] <- factor(res[, "i"], levels = unique(res[, "i"]))
+    res[, "labnames"] <- factor(res[, "labnames"], levels = unique(res[, "labnames"]))
     p <- ggplot(data = res) +
         theme_light(base_size = 13) +
         geom_abline(intercept = 0, slope = 1) +
