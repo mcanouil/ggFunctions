@@ -1,6 +1,5 @@
 ggFunctions
 ===========
-[![Build Status](https://travis-ci.org/mcanouil/ggFunctions.svg?branch=master)](https://travis-ci.org/mcanouil/ggFunctions)
 
 http://mcanouil.github.io/ggFunctions
 
